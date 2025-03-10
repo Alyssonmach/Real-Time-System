@@ -53,3 +53,4 @@ dkms.conf
 
 # Compiled Files
 process_management
+tests/*
