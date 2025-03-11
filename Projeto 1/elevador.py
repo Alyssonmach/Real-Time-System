@@ -8,10 +8,23 @@ residentes = ['Celinha', 'Mário', 'Rita', 'Arnaldo', 'Isadora', 'Álvara', 'Boz
              'Tatalo', 'Copellia', 'Deise', 'Ladir']
 
 pessoas = simulacao_residentes(nome_residentes = residentes)
-status = pessoas.set_status(id_residente = 10, seleciona_status = 1)
-print(status)
 
+for index, residente in enumerate(residentes):
+
+    print('Antes:\n')
+    print(pessoas.get_gestao())
+    print('--\n')
+    print(pessoas.inicia_chamada(max_andares = 5))
+    print('\nDepois:\n')
+    print(pessoas.get_gestao())
+
+print('\nAntes:\n')
 print(pessoas.get_gestao())
+print('--\n')
+print(pessoas.inicia_chamada(max_andares = 5))
+print('Depois:\n')
+print(pessoas.get_gestao())
+
 
 max_floor = 5
 calls_by_floor = [list()] * max_floor
