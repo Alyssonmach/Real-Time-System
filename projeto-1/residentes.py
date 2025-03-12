@@ -1,6 +1,9 @@
 import random
 
 class simulacao_residentes():
+    '''
+    Simula o comportamento dos residentes.
+    '''
 
     def __init__(self, nome_residentes: list) -> None:
         '''
