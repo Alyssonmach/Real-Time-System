@@ -179,6 +179,27 @@ class simulacao_residentes():
                          andar_final =chamado[1])
         
         return 1, self.get_dados_residente(id_residente = residente_ativo[0])
+    
+    def get_chamados_por_andar(self, num_andar):
+        '''
+        Retorna chamados de usuários estando eles em um determinado andar.
+
+        Args:
+            num_andar (int) -> Número do andar na qual os residentes se encontra.
+
+        Returns:
+            chamados (list) -> Todos os chamados ativos de residentes no andar alvo.
+        '''
+
+        chamados = list()
+        for dados_residente in self.gestao:
+            if dados_residente['Andar Partida'] == num_andar and dados_residente['Status'] == 'em espera':
+                chamados.append(dados_residente)
+        
+        return chamados
+                
+
+
 
 
 
