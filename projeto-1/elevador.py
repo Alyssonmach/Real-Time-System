@@ -61,7 +61,7 @@ class simulacao_elevador():
 
         Args:
             id_status (int): Número do status a ser adicionado: 
-                             `0 -> parado` e `' -> em movimento`
+                             `0 -> parado` e `1 -> em movimento`
         
         Returns:
             status (bool): Indica que a operação concluiu com sucesso `True` ou
@@ -83,8 +83,8 @@ class simulacao_elevador():
             None
         
         Returns:
-            status (bool): Indica que a operação concluiu com sucesso `True` ou
-            houve algum problema `False`
+            status (bool): Indica que a operação concluiu com sucesso (`True`) ou
+            houve algum problema / elevador parado ()`False`).
         '''
 
         if self.gestao['Status'] == 'em movimento':
@@ -93,6 +93,7 @@ class simulacao_elevador():
 
             if andar_atual == andar_chegada:
                 self.gestao['Status'] = 'parado'
+                return 0
             elif andar_atual > andar_chegada:
                 self.gestao['Andar Atual'] -= 1
             elif andar_atual < andar_chegada:
