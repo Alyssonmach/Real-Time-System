@@ -20,7 +20,7 @@ class simulacao_residentes():
         self.gestao = self.__cria_dicionario_gestao()   
         self.status_residentes = ['ocioso', 'em espera', 'no elevador']
     
-    def __cria_dicionario_gestao(self):
+    def __cria_dicionario_gestao(self) -> dict:
         '''
         Cria um dicionário de gestão de usuários.
 
@@ -45,7 +45,7 @@ class simulacao_residentes():
         
         return controle_residentes
     
-    def get_gestao(self):
+    def get_gestao(self) -> dict:
         '''
         Retorna o dicionário com o status de cada residente.
 
@@ -58,7 +58,7 @@ class simulacao_residentes():
 
         return self.gestao
     
-    def set_status(self, id_residente, seleciona_status = 0):
+    def set_status(self, id_residente: int, seleciona_status = 0) -> bool:
         '''
         Muda o status dos residentes.
 
@@ -84,7 +84,7 @@ class simulacao_residentes():
                 
         return 0
     
-    def set_andares(self, id_residente, andar_inicial, andar_final):
+    def set_andares(self, id_residente: int, andar_inicial: int, andar_final: int) -> bool:
         '''
         Define os andares objetivados pelo residente com relação ao elevador.
 
@@ -94,7 +94,8 @@ class simulacao_residentes():
             andar_final (int) -> Andar na qual o residente quer chegar.
         
         Returns:
-            None
+            status (bool) -> Indica se a operação foi concluída com sucesso (`True`) ou houve
+            alguma falha (`False`).
         '''
 
         for dados_residente in self.gestao:
@@ -108,7 +109,7 @@ class simulacao_residentes():
             
         return 0
                 
-    def get_por_status(self, seleciona_status):
+    def get_por_status(self, seleciona_status: int) -> list:
         '''
         Retorna uma lista de residentes com determinado status em referência ao elevador.
 
@@ -119,7 +120,8 @@ class simulacao_residentes():
                                     `2 -> no elevador`
         
         Returns:
-            ociosos (list) -> Lista de residente que pertencem ao mesmo status.
+            ociosos (list) -> Lista de residente que pertencem ao mesmo status (Caso ocorra algum erro,
+            retorna `False`).
         '''
 
         residentes_por_status = list()
@@ -132,7 +134,7 @@ class simulacao_residentes():
             
         return residentes_por_status
     
-    def get_dados_residente(self, id_residente):
+    def get_dados_residente(self, id_residente: int) -> dict:
         '''
         Retorna os dados do residente por ID.
 
@@ -140,7 +142,8 @@ class simulacao_residentes():
             id_residente (int) -> ID do residente.
         
         Returns:
-            dados_residente (dict) -> Dicionário contendo as informações do residente.
+            dados_residente (dict) -> Dicionário contendo as informações do residente (Caso ocorra algum erro,
+            retorna `False`).
         '''
 
         for dados_residente in self.gestao:
@@ -152,7 +155,7 @@ class simulacao_residentes():
         
         return 0
     
-    def inicia_chamada(self, max_andares):
+    def inicia_chamada(self, max_andares: int) -> tuple:
         '''
         Cria uma chamada de um residente ocioso para o elevador.
 
@@ -178,9 +181,9 @@ class simulacao_residentes():
                          andar_inicial = chamado[0], 
                          andar_final =chamado[1])
         
-        return 1, self.get_dados_residente(id_residente = residente_ativo[0])
+        return (1, self.get_dados_residente(id_residente = residente_ativo[0]))
     
-    def get_chamados_por_andar(self, num_andar):
+    def get_chamados_por_andar(self, num_andar: int) -> list:
         '''
         Retorna chamados de usuários estando eles em um determinado andar.
 

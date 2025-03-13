@@ -3,7 +3,7 @@ class simulacao_elevador():
     Simula o comportamento do elevador.
     '''
 
-    def __init__(self, andar_inicial):
+    def __init__(self, andar_inicial: int) -> None:
         '''
         Construtor da classe.
 
@@ -17,7 +17,7 @@ class simulacao_elevador():
         self.status_elevador = ['parado', 'em movimento']
         self.gestao = self.__cria_dicionario_elevador(andar_inicial = andar_inicial)
 
-    def __cria_dicionario_elevador(self, andar_inicial):
+    def __cria_dicionario_elevador(self, andar_inicial: int) -> dict:
         '''
         Cria um dicionário com as informações do elevador.
 
@@ -32,7 +32,7 @@ class simulacao_elevador():
 
         return gestao_elevador
     
-    def get_dados_elevador(self):
+    def get_dados_elevador(self) -> dict:
         '''
         Obtém um dicionário com os dados do elevador.
 
@@ -45,7 +45,7 @@ class simulacao_elevador():
 
         return self.gestao
     
-    def set_chegada(self, andar_chegada):
+    def set_chegada(self, andar_chegada: int) -> None:
         '''
         Define um novo ponto de chegada para o elevador.
 
@@ -55,7 +55,7 @@ class simulacao_elevador():
 
         self.gestao['Andar Chegada'] = andar_chegada
     
-    def set_status(self, id_status):
+    def set_status(self, id_status: int) -> bool:
         '''
         Define um novo status para o elevaor.
 
@@ -75,7 +75,7 @@ class simulacao_elevador():
         
         return 1
     
-    def movimenta_elevador(self):
+    def movimenta_elevador(self) -> bool:
         '''
         Movimenta o andar atual do elevador para um andar alvo.
 
@@ -84,7 +84,7 @@ class simulacao_elevador():
         
         Returns:
             status (bool): Indica que a operação concluiu com sucesso (`True`) ou
-            houve algum problema / elevador parado ()`False`).
+            houve algum problema / elevador parado (`False`).
         '''
 
         if self.gestao['Status'] == 'em movimento':
