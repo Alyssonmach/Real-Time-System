@@ -1,7 +1,7 @@
 # Sistemas em Tempo Real [UFCG]
 ***
 
-![Vídeo de Apresentação](https://www.youtube.com/watch?v=tGET-bNy-5c)
+* [Vídeo de Apresentação](https://www.youtube.com/watch?v=tGET-bNy-5c)
 
 # Sistema Simplificado de Controle de Elevador
 
