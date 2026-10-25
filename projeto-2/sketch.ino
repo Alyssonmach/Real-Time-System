@@ -4,13 +4,7 @@
 
 #define TEMPO_OPERACAO_ROBO 100
 #define TEMPO_MOVIMENTO_R1_R2_R4 500
-#define TEMPO_MOVIMENTO_R3 800
 #define TEMPO_PRODUCAO_M1_M2 1500
-#define TEMPO_PRODUCAO_M3 3000
-
-int estado = 0;
-
-// SemaphoreHandle_t xMutex;
 
 // Semáforos para controle dos ítens na entrada e saída das máquinas
 SemaphoreHandle_t xtemEntradaCelula;
@@ -26,10 +20,6 @@ SemaphoreHandle_t xtemEntradaM2;
 SemaphoreHandle_t xtemSaidaM2;
 SemaphoreHandle_t xmoveR4;
 
-// SemaphoreHandle_t xtemEntradaM3;
-// SemaphoreHandle_t xtemSaidaM3;
-// SemaphoreHandle_t xmoveR3;
-
 SemaphoreHandle_t xtemEntradaM4;
 SemaphoreHandle_t xtemSaidaM4;
 
@@ -37,20 +27,17 @@ SemaphoreHandle_t xtemSaidaM4;
 QueueHandle_t qFilaCelula;
 QueueHandle_t qFilaM1;
 QueueHandle_t qFilaM2;
-// QueueHandle_t qFilaM3;
 QueueHandle_t qFilaM4;
 
 // Escopo das funções de controle dos robôs
 void vRoboR1(void *pvParameters);
 void vRoboR2(void *pvParameters);
-// void vRoboR3(void *pvParameters);
 void vRoboR4(void *pvParameters);
 
 // Escopo das funções de controle das máquinas
 void vMaquinaCelula(void *pvParameters);
 void vMaquinaM1(void *pvParameters);
 void vMaquinaM2(void *pvParameters);
-// void vMaquinaM3(void *pvParameters);
 void vMaquinaM4(void *pvParameters);
 
 void setup() {
@@ -71,10 +58,6 @@ void setup() {
   xtemSaidaM2 = xSemaphoreCreateBinary();
   xmoveR4 = xSemaphoreCreateBinary();
 
-  // xtemEntradaM3 = xSemaphoreCreateBinary();
-  // xtemSaidaM3 = xSemaphoreCreateBinary();
-  // xmoveR3 = xSemaphoreCreateBinary();
-
   xtemEntradaM4 = xSemaphoreCreateBinary();
   xtemSaidaM4 = xSemaphoreCreateBinary();
 
@@ -82,7 +65,6 @@ void setup() {
   xSemaphoreGive(xtemEntradaCelula);
   xSemaphoreGive(xtemEntradaM1);
   xSemaphoreGive(xtemEntradaM2);
-  // xSemaphoreGive(xtemEntradaM3);
   xSemaphoreGive(xtemEntradaM4);
 
   Serial.println("Iniciando a jornada!");
@@ -91,7 +73,6 @@ void setup() {
   qFilaCelula = xQueueCreate(1, sizeof(int));
   qFilaM1 = xQueueCreate(1, sizeof(int));
   qFilaM2 = xQueueCreate(1, sizeof(int));
-  // qFilaM3 = xQueueCreate(1, sizeof(int));
   qFilaM4 = xQueueCreate(1, sizeof(int));
 
   // Criação das tarefas
@@ -100,8 +81,6 @@ void setup() {
   xTaskCreate(vRoboR1, "Robo R1", 128, NULL, 2, NULL);
   xTaskCreate(vMaquinaM2, "Maquina M2", 128, NULL, 1, NULL);
   xTaskCreate(vRoboR2, "Robo R2", 128, NULL, 2, NULL);
-  // xTaskCreate(vRoboR3, "Robo R3", 128, NULL, 2, NULL);
-  // xTaskCreate(vMaquinaM3, "Maquina M3", 128, NULL, 1, NULL);
   xTaskCreate(vRoboR4, "Robo R4", 128, NULL, 2, NULL);
   xTaskCreate(vMaquinaM4, "Maquina M4", 128, NULL, 1, NULL);
   
@@ -175,20 +154,6 @@ void vMaquinaM1(void *pvParameters) {
         // Autoriza a vinda do robô
         xSemaphoreGive(xmoveR2);
 
-        // if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE) {
-          // if (estado == 0) {
-          //   xSemaphoreGive(xmoveR2);
-          //   //xSemaphoreTake(xmoveR3, portMAX_DELAY);
-          // }
-          // else {
-          //   xSemaphoreGive(xmoveR3);
-          //   //xSemaphoreTake(xmoveR2, portMAX_DELAY);
-          // }
-          
-          // estado = !estado;
-
-          // xSemaphoreGive(xMutex);
-        // }
       }
     }
   }
@@ -200,7 +165,6 @@ void vRoboR2(void *pvParameters) {
   
   while (1) {
     if (xSemaphoreTake(xmoveR2, portMAX_DELAY) == pdTRUE) {
-      //if (xSemaphoreTake(xmoveR3, portMAX_DELAY) == pdTRUE) {
         Serial.println("R2: Movendo para M1");
         vTaskDelay(pdMS_TO_TICKS(TEMPO_MOVIMENTO_R1_R2_R4));
 
@@ -217,43 +181,10 @@ void vRoboR2(void *pvParameters) {
             xQueueReceive(qFilaM1, &item, portMAX_DELAY);
             xQueueSend(qFilaM2, &item, portMAX_DELAY);
             xSemaphoreGive(xtemEntradaM1);
-            // xSemaphoreGive(xmoveR3);
           }
         }
-      //}
   } }
 }
-
-// void vRoboR3(void *pvParameters) {
-//   (void) pvParameters;
-//   int item;
-  
-//   while (1) {
-//     //vTaskDelay(pdMS_TO_TICKS(1000));
-//     if (xSemaphoreTake(xmoveR3, portMAX_DELAY) == pdTRUE) {
-//       //if (xSemaphoreTake(xmoveR2, portMAX_DELAY) == pdTRUE) {
-//         Serial.println("R3: Movendo para M1");
-//         vTaskDelay(pdMS_TO_TICKS(TEMPO_MOVIMENTO_R3));
-
-//         Serial.println("R3: Retirando de M1");
-//         vTaskDelay(pdMS_TO_TICKS(TEMPO_OPERACAO_ROBO));
-
-//         Serial.println("R3: Movendo para M3");
-//         vTaskDelay(pdMS_TO_TICKS(TEMPO_MOVIMENTO_R1_R2_R4));
-
-//         if (xSemaphoreTake(xtemEntradaM3, portMAX_DELAY) == pdTRUE) {
-//           Serial.println("R3: Depositando em M3");
-//           if (xSemaphoreTake(xtemSaidaM1, portMAX_DELAY) == pdTRUE) {
-//             vTaskDelay(pdMS_TO_TICKS(TEMPO_OPERACAO_ROBO));
-//             xQueueReceive(qFilaM1, &item, portMAX_DELAY);
-//             xQueueSend(qFilaM3, &item, portMAX_DELAY);
-//             xSemaphoreGive(xtemEntradaM1);
-//             // xSemaphoreGive(xmoveR2);
-//           }
-//         }
-//       //}
-//   } }
-// }
 
 void vMaquinaM2(void *pvParameters) {
   (void) pvParameters;
@@ -273,23 +204,7 @@ void vMaquinaM2(void *pvParameters) {
   }
 }
 
-// void vMaquinaM3(void *pvParameters) {
-//   (void) pvParameters;
-//   int item = 0;
   
-//   while (1) {
-//     if (!uxQueueSpacesAvailable(qFilaM3) > 0) {
-//       if (uxSemaphoreGetCount(xtemSaidaM3) == 0) {
-//         Serial.println("M3: Item na Entrada, processando...");
-//         vTaskDelay(pdMS_TO_TICKS(TEMPO_PRODUCAO_M3));
-
-//         Serial.println("M3: Item pronto na saida");
-//         xSemaphoreGive(xtemSaidaM3);
-//         xSemaphoreGive(xmoveR4);
-//       }
-//     }
-//   }
-// }
 
 void vRoboR4(void *pvParameters) {
   (void) pvParameters;
@@ -337,31 +252,3 @@ void vMaquinaM4(void *pvParameters) {
     }
   }
 }
-
-// void vRoboR3(void *pvParameters) {
-//   (void) pvParameters;
-//   int item;
-  
-//   while (1) {
-//     if (xSemaphoreTake(xtemSaidaM1, portMAX_DELAY) == pdTRUE) {
-//       Serial.println("R3: Movendo para M1");
-//       vTaskDelay(pdMS_TO_TICKS(TEMPO_MOVIMENTO_R3));
-
-//       Serial.println("R3: Retirando de M1");
-//       vTaskDelay(pdMS_TO_TICKS(TEMPO_OPERACAO_ROBO));
-
-//       Serial.println("R3: Movendo para M3");
-//       vTaskDelay(pdMS_TO_TICKS(TEMPO_MOVIMENTO_R3));
-
-//       if (xSemaphoreTake(xtemEntradaM3, portMAX_DELAY) == pdTRUE) {
-//         Serial.println("R3: Depositando em M3");
-//         vTaskDelay(pdMS_TO_TICKS(TEMPO_OPERACAO_ROBO));
-//         xQueueReceive(qFilaM1, &item, portMAX_DELAY);
-//         xQueueSend(qFilaM3, &item, portMAX_DELAY);
-//         xSemaphoreGive(xtemEntradaM1);
-//       }
-//     }
-//   }
-// }
-
-
